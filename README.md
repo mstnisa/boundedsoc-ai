@@ -1,5 +1,9 @@
 # AI SOC Workbench
 
+> 👋 **New here, or not a developer?** Skip straight to
+> **[`START_HERE.md`](START_HERE.md)** — a step-by-step guide with zero
+> assumed coding experience to get this running on your own computer.
+
 **Explainable, human-in-the-loop security investigation automation.**
 
 The AI assists; it never autonomously declares an incident malicious, isolates a
