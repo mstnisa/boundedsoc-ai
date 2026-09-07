@@ -1,0 +1,214 @@
+{
+  "summary": {
+    "run_timestamp_utc": "2026-09-07T06:01:44Z",
+    "backend_base_url": "http://localhost:8000",
+    "n_cases": 5,
+    "time_to_triage_seconds": {
+      "mean": 0.09059064840002976,
+      "median": 0.04892166900003758,
+      "min": 0.04290266800012432,
+      "max": 0.2528267390000565
+    },
+    "time_to_report_draft_seconds": {
+      "mean": 0.12099558340005387,
+      "median": 0.0747992400001749,
+      "min": 0.06759350300012557,
+      "max": 0.29817881300004956
+    },
+    "ioc_enrichment_latency_seconds": {
+      "mean": 0.007576786799927504
+    },
+    "mitre_suggestion_accuracy": {
+      "mean_precision": 0.8,
+      "mean_recall": 0.8,
+      "mean_f1": 0.8
+    },
+    "incident_classification_confusion_matrix": {
+      "TP": 3,
+      "FP": 1,
+      "TN": 1,
+      "FN": 0
+    },
+    "incident_classification_accuracy": 0.8,
+    "false_positive_rate": 0.5,
+    "false_negative_rate": 0.0,
+    "api_requests_total": 35,
+    "api_requests_failed": 0,
+    "api_failure_rate": 0.0,
+    "hallucination_and_evidence_drop_stats": {
+      "total_ai_suggestion_attempts": 10,
+      "accepted_evidence_backed_suggestions": 10,
+      "dropped_for_missing_or_hallucinated_evidence": 0,
+      "drop_rate": 0.0,
+      "note": "A 'drop' means a claim was rejected before ever reaching the database because it lacked a valid evidence_ref -- this is the guardrail working, not a hallucination that leaked through. With the default mock LLM provider, the drop rate is structurally 0% because the mock only ever echoes evidence_id tokens it was actually given (see tests/adversarial/test_prompt_injection.py for a test using a deliberately hallucinating provider, which confirms the drop path itself works)."
+    },
+    "human_correction_rate": null,
+    "human_correction_rate_note": "NOT MEASURED. This requires real analysts using the review endpoint over time; no live analyst usage has occurred yet. The review/audit infrastructure to measure this (analyst_reviews.decision counts vs total AI suggestions) is implemented and ready -- see app.api.routes.incidents:submit_incident_review and GET /audit-logs -- but the number itself does not exist until real analysts generate it. Treat this as a roadmap item, not an omitted result.",
+    "manual_workflow_note": "Manual-workflow figures are a DOCUMENTED STEP COUNT, not a timed duration -- no human analysts were available to time a fully manual investigation of these cases. See MANUAL_STEPS_PER_CASE and ASSISTED_ANALYST_ACTIONS_PER_CASE in this script. Do not read the numbers below as a measured time-savings claim.",
+    "manual_steps_per_case": {
+      "read_and_triage_alert": 1,
+      "manually_extract_iocs": 1,
+      "per_ioc_ti_lookup": "1 per IOC (each a separate console/tab)",
+      "manual_mitre_mapping": 1,
+      "manual_timeline_reconstruction": 1,
+      "write_report_draft": 1,
+      "peer_review_pass": 1
+    },
+    "assisted_analyst_actions_per_case": 6
+  },
+  "per_case_results": [
+    {
+      "case_id": "malicious-powershell-c2",
+      "incident_id": "934d27b6-1faf-42e7-9b9e-282abd2ed1fa",
+      "timings_seconds": {
+        "ingest": 0.1774349649999749,
+        "extract_iocs": 0.017050735000111672,
+        "enrich": 0.01404245699995954,
+        "severity_suggestion": 0.02618586099993081,
+        "mitre_suggestions": 0.024611542000002373,
+        "report_draft": 0.020651171999816142
+      },
+      "time_to_triage_seconds": 0.2528267390000565,
+      "time_to_report_draft_seconds": 0.29817881300004956,
+      "predicted_severity": "high",
+      "expected_severity_band": [
+        "high",
+        "critical"
+      ],
+      "severity_in_expected_band": true,
+      "predicted_mitre_techniques": [
+        "T1059.001",
+        "T1078",
+        "T1110"
+      ],
+      "expected_mitre_techniques": [
+        "T1059.001",
+        "T1078",
+        "T1110"
+      ],
+      "mitre_precision": 1.0,
+      "mitre_recall": 1.0,
+      "mitre_f1": 1.0,
+      "confusion_label": "TP",
+      "api_errors": []
+    },
+    {
+      "case_id": "malicious-credential-dumping",
+      "incident_id": "58ec4c76-729c-4dc2-9b28-223d4452fc23",
+      "timings_seconds": {
+        "ingest": 0.01172664499995335,
+        "extract_iocs": 0.007228300999940984,
+        "enrich": 0.00540435199991407,
+        "severity_suggestion": 0.012413764000029914,
+        "mitre_suggestions": 0.013501928999858137,
+        "report_draft": 0.012314621000086845
+      },
+      "time_to_triage_seconds": 0.04892166900003758,
+      "time_to_report_draft_seconds": 0.0747992400001749,
+      "predicted_severity": "medium",
+      "expected_severity_band": [
+        "high",
+        "critical"
+      ],
+      "severity_in_expected_band": false,
+      "predicted_mitre_techniques": [
+        "T1003.001"
+      ],
+      "expected_mitre_techniques": [
+        "T1003.001"
+      ],
+      "mitre_precision": 1.0,
+      "mitre_recall": 1.0,
+      "mitre_f1": 1.0,
+      "confusion_label": "TP",
+      "api_errors": []
+    },
+    {
+      "case_id": "benign-admin-powershell",
+      "incident_id": "28fdcaf3-5deb-44f2-aa58-d692c07feba2",
+      "timings_seconds": {
+        "ingest": 0.010336405000089144,
+        "extract_iocs": 0.0061553059999823745,
+        "enrich": 0.004899587999943833,
+        "severity_suggestion": 0.012140387000044939,
+        "mitre_suggestions": 0.011356799999930445,
+        "report_draft": 0.01327015200013193
+      },
+      "time_to_triage_seconds": 0.04290266800012432,
+      "time_to_report_draft_seconds": 0.06759350300012557,
+      "predicted_severity": "low",
+      "expected_severity_band": [
+        "low",
+        "unknown"
+      ],
+      "severity_in_expected_band": true,
+      "predicted_mitre_techniques": [],
+      "expected_mitre_techniques": [],
+      "mitre_precision": 1.0,
+      "mitre_recall": 1.0,
+      "mitre_f1": 1.0,
+      "confusion_label": "TN",
+      "api_errors": []
+    },
+    {
+      "case_id": "benign-single-failed-logon",
+      "incident_id": "c77051fd-7c44-4047-a9ca-2dbc4282b9d9",
+      "timings_seconds": {
+        "ingest": 0.01107602299998689,
+        "extract_iocs": 0.008327452999992602,
+        "enrich": 0.0049461159999282245,
+        "severity_suggestion": 0.011883772000146564,
+        "mitre_suggestions": 0.01262466600019252,
+        "report_draft": 0.012577667999948972
+      },
+      "time_to_triage_seconds": 0.04594608200000039,
+      "time_to_report_draft_seconds": 0.07122580999998718,
+      "predicted_severity": "low",
+      "expected_severity_band": [
+        "low",
+        "unknown"
+      ],
+      "severity_in_expected_band": true,
+      "predicted_mitre_techniques": [
+        "T1110"
+      ],
+      "expected_mitre_techniques": [],
+      "mitre_precision": 0.0,
+      "mitre_recall": 0.0,
+      "mitre_f1": 0.0,
+      "confusion_label": "FP",
+      "api_errors": []
+    },
+    {
+      "case_id": "malicious-brute-force-only",
+      "incident_id": "62b6b859-aeb0-4019-b146-ee3e1e060498",
+      "timings_seconds": {
+        "ingest": 0.017133500999989337,
+        "extract_iocs": 0.010044422000191844,
+        "enrich": 0.008591420999891852,
+        "severity_suggestion": 0.015064968999922712,
+        "mitre_suggestions": 0.01599351499999102,
+        "report_draft": 0.014721731000008731
+      },
+      "time_to_triage_seconds": 0.06235608399992998,
+      "time_to_report_draft_seconds": 0.09318055099993217,
+      "predicted_severity": "low",
+      "expected_severity_band": [
+        "medium",
+        "high"
+      ],
+      "severity_in_expected_band": false,
+      "predicted_mitre_techniques": [
+        "T1110"
+      ],
+      "expected_mitre_techniques": [
+        "T1110"
+      ],
+      "mitre_precision": 1.0,
+      "mitre_recall": 1.0,
+      "mitre_f1": 1.0,
+      "confusion_label": "TP",
+      "api_errors": []
+    }
+  ]
+}
