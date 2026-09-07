@@ -4,6 +4,7 @@ import type {
   IOC,
   IncidentDetail,
   IncidentSummary,
+  IntegrationOut,
   MitreSuggestion,
   ReportOut,
   SeveritySuggestion,
@@ -72,6 +73,7 @@ export const api = {
     const suffix = qs.toString() ? `?${qs.toString()}` : "";
     return request<AuditLogOut[]>(`/audit-logs${suffix}`);
   },
+  listIntegrations: () => request<IntegrationOut[]>(`/integrations`),
   ingestDemo: (payload: unknown) =>
     request<{ ingested: number; alert_ids: string[]; incident_id: string }>(`/alerts`, {
       method: "POST",

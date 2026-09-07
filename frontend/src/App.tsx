@@ -1,28 +1,26 @@
-import { Route, Routes, Link } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
+import Sidebar from "./components/Sidebar";
+import Dashboard from "./pages/Dashboard";
 import IncidentQueue from "./pages/IncidentQueue";
 import IncidentDetailPage from "./pages/IncidentDetail";
 import AuditTrail from "./pages/AuditTrail";
+import Integrations from "./pages/Integrations";
 
 export default function App() {
   return (
     <div className="app-shell">
-      <header className="topbar">
-        <Link to="/" className="brand">
-          🛡️ AI SOC Workbench
-        </Link>
-        <nav>
-          <Link to="/">Incident Queue</Link>
-          <Link to="/audit">Audit Trail</Link>
-        </nav>
-        <div className="topbar-note">AI assists — a human approves every consequential claim</div>
-      </header>
-      <main className="content">
-        <Routes>
-          <Route path="/" element={<IncidentQueue />} />
-          <Route path="/incidents/:id" element={<IncidentDetailPage />} />
-          <Route path="/audit" element={<AuditTrail />} />
-        </Routes>
-      </main>
+      <Sidebar />
+      <div className="main-area">
+        <main className="content">
+          <Routes>
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/queue" element={<IncidentQueue />} />
+            <Route path="/incidents/:id" element={<IncidentDetailPage />} />
+            <Route path="/audit" element={<AuditTrail />} />
+            <Route path="/integrations" element={<Integrations />} />
+          </Routes>
+        </main>
+      </div>
     </div>
   );
 }

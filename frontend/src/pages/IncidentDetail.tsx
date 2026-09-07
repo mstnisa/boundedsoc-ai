@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { api } from "../api/client";
 import type {
   EnrichmentResult,
@@ -108,6 +108,13 @@ export default function IncidentDetailPage() {
 
   return (
     <div>
+      <div className="muted" style={{ fontSize: "0.78rem", marginBottom: 10, display: "flex", alignItems: "center", gap: 6 }}>
+        <Link to="/queue">Incident Queue</Link>
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--muted-2)" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+          <polyline points="9 18 15 12 9 6" />
+        </svg>
+        <span>{incident.title}</span>
+      </div>
       <div className="card">
         <div className="section-title">
           {incident.title}
@@ -277,25 +284,55 @@ export default function IncidentDetailPage() {
           <button onClick={doMitre} disabled={busy === "mitre"}>
             {busy === "mitre" ? "Analyzing…" : "Generate MITRE Suggestions"}
           </button>
-          {mitre.map((m) => (
-            <div key={m.id} className="card" style={{ background: "var(--panel-2)" }}>
-              <strong>
-                {m.technique_id} — {m.technique_name}
-              </strong>{" "}
-              <span className="pill">{m.status}</span> <span className="pill">confidence {m.confidence.toFixed(2)}</span>
-              <p className="muted">{m.rationale}</p>
-              <div className="evidence-refs">Evidence: {m.evidence_refs.join(", ")}</div>
-              <div style={{ marginTop: 8 }}>
-                <button onClick={() => review("mitre_suggestion", m.id, "approve")}>Approve</button>
-                <button className="secondary" onClick={() => review("mitre_suggestion", m.id, "edit")}>
-                  Edit
-                </button>
-                <button className="danger" onClick={() => review("mitre_suggestion", m.id, "reject")}>
-                  Reject
-                </button>
+          {mitre.map((m) => {
+            const statusClass =
+              m.status === "approved" || m.status === "edited"
+                ? "status-approved"
+                : m.status === "rejected"
+                ? "status-rejected"
+                : "status-pending";
+            return (
+              <div
+                key={m.id}
+                className="card"
+                style={m.status === "rejected" ? { opacity: 0.75 } : undefined}
+              >
+                <div className="section-title" style={{ marginBottom: 8 }}>
+                  <strong style={{ fontSize: "0.94rem", color: "var(--text)" }}>
+                    {m.technique_id} — {m.technique_name}
+                  </strong>
+                  <span className={`pill ${statusClass}`}>
+                    {(m.status === "approved" || m.status === "edited") && (
+                      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#0d7a2e" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round">
+                        <polyline points="20 6 9 17 4 12" />
+                      </svg>
+                    )}
+                    {m.status === "rejected" && (
+                      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="var(--critical)" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18" />
+                        <line x1="6" y1="6" x2="18" y2="18" />
+                      </svg>
+                    )}
+                    {m.status}
+                  </span>
+                  <span className="pill">confidence {m.confidence.toFixed(2)}</span>
+                </div>
+                <p className="muted" style={{ fontSize: "0.82rem" }}>{m.rationale}</p>
+                <div className="evidence-refs">Evidence: {m.evidence_refs.join(", ")}</div>
+                {m.status === "pending" && (
+                  <div style={{ marginTop: 10 }}>
+                    <button onClick={() => review("mitre_suggestion", m.id, "approve")}>Approve</button>
+                    <button className="secondary" onClick={() => review("mitre_suggestion", m.id, "edit")}>
+                      Edit
+                    </button>
+                    <button className="danger" onClick={() => review("mitre_suggestion", m.id, "reject")}>
+                      Reject
+                    </button>
+                  </div>
+                )}
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
 

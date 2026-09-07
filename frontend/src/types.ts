@@ -91,6 +91,14 @@ export interface AuditLogOut {
   timestamp: string;
 }
 
+export interface IntegrationOut {
+  id: string;
+  name: string;
+  type: string;
+  config_ref: string;
+  enabled: boolean;
+}
+
 export interface SeveritySuggestion {
   suggested: boolean;
   severity?: Severity;
