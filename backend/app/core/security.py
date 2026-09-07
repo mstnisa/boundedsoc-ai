@@ -8,9 +8,10 @@ initially." Set AUTH_SINGLE_USER_MODE=false and issue tokens via /auth/login
 
 from datetime import datetime, timedelta, timezone
 
+import jwt
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
-from jose import JWTError, jwt
+from jwt import PyJWTError
 from passlib.context import CryptContext
 
 from app.core.config import get_settings
@@ -57,7 +58,7 @@ def get_current_user(
         if email is None:
             raise ValueError("missing subject")
         return CurrentUser(email=email, role=role)
-    except (JWTError, ValueError) as exc:
+    except (PyJWTError, ValueError) as exc:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token") from exc
 
 

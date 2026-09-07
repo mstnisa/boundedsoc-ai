@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends, HTTPException, Query, Response
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-from app.core.security import CurrentUser, get_current_user
+from app.core.security import CurrentUser, get_current_user, require_role
 from app.db.session import get_db
 from app.models.event import Event
 from app.models.incident import Incident, IncidentStatus, Severity
@@ -198,7 +198,12 @@ def submit_incident_review(
     incident_id: uuid.UUID,
     payload: ReviewIn,
     db: Session = Depends(get_db),
-    user: CurrentUser = Depends(get_current_user),
+    # Only analyst/senior_analyst/admin roles may render a review decision —
+    # this is the human-in-the-loop gate itself, so it's the one endpoint in
+    # the API where role-based access control matters most. A no-op in the
+    # default AUTH_SINGLE_USER_MODE=true demo config; enforced once real
+    # multi-user auth is turned on.
+    user: CurrentUser = Depends(require_role("analyst", "senior_analyst", "admin")),
 ):
     _get_incident_or_404(db, incident_id)
     local_user = users.get_or_create_local_user(db)
