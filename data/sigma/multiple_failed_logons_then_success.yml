@@ -1,0 +1,24 @@
+title: Multiple Failed Logons Followed by Success (Possible Brute Force)
+id: 4a1b2c3d-5e6f-4789-a0b1-c2d3e4f5a6b7
+status: stable
+description: Detects a burst of failed authentication attempts on a host followed by a successful logon for the same account, indicative of a successful brute-force or credential-stuffing attempt.
+references:
+  - https://attack.mitre.org/techniques/T1110/
+  - https://attack.mitre.org/techniques/T1078/
+tags:
+  - attack.credential-access
+  - attack.t1110
+  - attack.defense-evasion
+  - attack.t1078
+logsource:
+  product: windows
+  category: authentication
+detection:
+  failed:
+    EventID: 4625
+  success:
+    EventID: 4624
+  condition: failed | count() by TargetUserName > 4 and success
+level: high
+falsepositives:
+  - User who forgot their password and later logged in successfully

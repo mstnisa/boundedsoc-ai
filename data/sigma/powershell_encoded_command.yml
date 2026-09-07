@@ -1,0 +1,27 @@
+title: Suspicious Encoded PowerShell Command
+id: 7b3f9c2a-1e4d-4a2b-9c3f-2a1e4d4a2b9c
+status: stable
+description: Detects PowerShell execution with an encoded/obfuscated command, commonly used to bypass detections and download secondary payloads.
+references:
+  - https://attack.mitre.org/techniques/T1059/001/
+  - https://attack.mitre.org/techniques/T1027/
+tags:
+  - attack.execution
+  - attack.t1059.001
+  - attack.defense-evasion
+  - attack.t1027
+logsource:
+  product: windows
+  category: process_creation
+detection:
+  selection:
+    Image|endswith: '\powershell.exe'
+    CommandLine|contains:
+      - '-enc'
+      - '-EncodedCommand'
+      - 'IEX'
+      - 'DownloadString'
+  condition: selection
+level: high
+falsepositives:
+  - Legitimate administrative scripting (should still be reviewed for context)

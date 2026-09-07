@@ -1,0 +1,61 @@
+{
+  "_description": "Bundled local subset of MITRE ATT&CK (Enterprise) techniques relevant to the demo scenario and common SOC alerts. Not a full copy of the framework — extend as needed. Fields loosely follow the public ATT&CK STIX schema.",
+  "techniques": [
+    {
+      "technique_id": "T1059.001",
+      "name": "Command and Scripting Interpreter: PowerShell",
+      "tactic": "execution",
+      "description": "Adversaries may abuse PowerShell commands and scripts for execution.",
+      "keywords": ["powershell", "encodedcommand", "-enc", "invoke-expression", "iex", "downloadstring", "bypass"]
+    },
+    {
+      "technique_id": "T1003.001",
+      "name": "OS Credential Dumping: LSASS Memory",
+      "tactic": "credential-access",
+      "description": "Adversaries may attempt to access credential material stored in LSASS process memory.",
+      "keywords": ["lsass", "mimikatz", "procdump", "sekurlsa"]
+    },
+    {
+      "technique_id": "T1078",
+      "name": "Valid Accounts",
+      "tactic": "defense-evasion",
+      "description": "Adversaries may obtain and abuse credentials of existing accounts as a means of gaining Initial Access, Persistence, Privilege Escalation, or Defense Evasion.",
+      "keywords": ["logon", "authentication", "successful login", "valid account", "brute force success"]
+    },
+    {
+      "technique_id": "T1110",
+      "name": "Brute Force",
+      "tactic": "credential-access",
+      "description": "Adversaries may use brute force techniques to gain access to accounts.",
+      "keywords": ["failed logon", "failed login", "multiple failed", "authentication failure", "4625"]
+    },
+    {
+      "technique_id": "T1071.001",
+      "name": "Application Layer Protocol: Web Protocols",
+      "tactic": "command-and-control",
+      "description": "Adversaries may communicate using web protocols to blend in with existing traffic.",
+      "keywords": ["http", "https", "beacon", "c2", "user-agent"]
+    },
+    {
+      "technique_id": "T1105",
+      "name": "Ingress Tool Transfer",
+      "tactic": "command-and-control",
+      "description": "Adversaries may transfer tools or other files from an external system.",
+      "keywords": ["downloadstring", "certutil", "bitsadmin", "curl", "wget", "invoke-webrequest"]
+    },
+    {
+      "technique_id": "T1547.001",
+      "name": "Boot or Logon Autostart Execution: Registry Run Keys / Startup Folder",
+      "tactic": "persistence",
+      "description": "Adversaries may achieve persistence by adding a program to a startup folder or referencing it with a Registry run key.",
+      "keywords": ["run key", "startup folder", "currentversion\\run", "persistence"]
+    },
+    {
+      "technique_id": "T1027",
+      "name": "Obfuscated Files or Information",
+      "tactic": "defense-evasion",
+      "description": "Adversaries may attempt to make an executable or file difficult to discover or analyze by encrypting, encoding, or otherwise obfuscating its contents.",
+      "keywords": ["base64", "encodedcommand", "obfuscat", "-enc"]
+    }
+  ]
+}
