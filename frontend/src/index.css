@@ -1,0 +1,221 @@
+:root {
+  color-scheme: light dark;
+  --bg: #0f1420;
+  --panel: #171d2b;
+  --panel-2: #1e2536;
+  --border: #2a3244;
+  --text: #e6e9ef;
+  --muted: #94a0b8;
+  --accent: #4f8cff;
+  --low: #6ee7b7;
+  --medium: #fbbf24;
+  --high: #fb923c;
+  --critical: #f87171;
+  --unknown: #94a0b8;
+  font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.app-shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 14px 24px;
+  background: var(--panel);
+  border-bottom: 1px solid var(--border);
+}
+
+.brand {
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--text);
+}
+
+.topbar nav {
+  display: flex;
+  gap: 16px;
+}
+
+.topbar-note {
+  margin-left: auto;
+  font-size: 0.8rem;
+  color: var(--muted);
+  font-style: italic;
+}
+
+.content {
+  padding: 24px;
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 18px;
+  margin-bottom: 18px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  text-align: left;
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.9rem;
+}
+
+th {
+  color: var(--muted);
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+}
+
+tr:hover td {
+  background: var(--panel-2);
+}
+
+.badge {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.badge.low { background: rgba(110,231,183,0.15); color: var(--low); }
+.badge.medium { background: rgba(251,191,36,0.15); color: var(--medium); }
+.badge.high { background: rgba(251,146,60,0.15); color: var(--high); }
+.badge.critical { background: rgba(248,113,113,0.15); color: var(--critical); }
+.badge.unknown { background: rgba(148,160,184,0.15); color: var(--unknown); }
+
+.badge.verdict-malicious { background: rgba(248,113,113,0.15); color: var(--critical); }
+.badge.verdict-suspicious { background: rgba(251,191,36,0.15); color: var(--medium); }
+.badge.verdict-benign { background: rgba(110,231,183,0.15); color: var(--low); }
+
+button {
+  background: var(--accent);
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  margin-right: 8px;
+  margin-bottom: 8px;
+}
+
+button.secondary {
+  background: var(--panel-2);
+  border: 1px solid var(--border);
+  color: var(--text);
+}
+
+button.danger {
+  background: #7f1d1d;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.section-title {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.pill {
+  font-size: 0.7rem;
+  padding: 2px 8px;
+  border-radius: 6px;
+  background: var(--panel-2);
+  color: var(--muted);
+  border: 1px solid var(--border);
+}
+
+.ai-disclaimer {
+  background: rgba(251, 191, 36, 0.08);
+  border: 1px solid rgba(251, 191, 36, 0.3);
+  color: #fbbf24;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  margin-bottom: 12px;
+}
+
+.evidence-refs {
+  font-size: 0.72rem;
+  color: var(--muted);
+  margin-top: 4px;
+}
+
+pre.report-content {
+  white-space: pre-wrap;
+  font-family: "SF Mono", Consolas, monospace;
+  font-size: 0.82rem;
+  background: var(--panel-2);
+  padding: 14px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  max-height: 500px;
+  overflow: auto;
+}
+
+.mono {
+  font-family: "SF Mono", Consolas, monospace;
+  font-size: 0.78rem;
+}
+
+.muted { color: var(--muted); }
+
+.tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.tab {
+  padding: 8px 14px;
+  cursor: pointer;
+  color: var(--muted);
+  border-bottom: 2px solid transparent;
+}
+
+.tab.active {
+  color: var(--text);
+  border-bottom-color: var(--accent);
+}
