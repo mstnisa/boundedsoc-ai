@@ -1,0 +1,167 @@
+{
+  "name": "AI SOC Workbench — Trigger → Enrich → Notify → Human Checkpoint",
+  "nodes": [
+    {
+      "parameters": {
+        "path": "new-alert-ingested",
+        "httpMethod": "POST",
+        "responseMode": "onReceived",
+        "options": {}
+      },
+      "id": "webhook-trigger",
+      "name": "Webhook: New Alert Ingested",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [-40, 260]
+    },
+    {
+      "parameters": {
+        "content": "## Orchestration only\nThis workflow calls the FastAPI backend for every real decision. n8n never computes severity, MITRE mappings, or IOC verdicts itself, and never takes a response action — it just sequences existing, audited backend calls and pings the SOC channel so a human knows to open the dashboard.",
+        "height": 220,
+        "width": 320
+      },
+      "id": "sticky-note-1",
+      "name": "Sticky Note: Scope",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [-40, -40]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.BACKEND_BASE_URL }}/incidents/{{$json[\"incident_id\"]}}/extract-iocs",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [{ "name": "Content-Type", "value": "application/json" }]
+        },
+        "options": {}
+      },
+      "id": "extract-iocs",
+      "name": "Extract IOCs",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [220, 260]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.BACKEND_BASE_URL }}/incidents/{{$json[\"incident_id\"]}}/enrich",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [{ "name": "Content-Type", "value": "application/json" }]
+        },
+        "options": {}
+      },
+      "id": "enrich",
+      "name": "Enrich IOCs (mocked TI adapters by default)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [460, 260]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.BACKEND_BASE_URL }}/incidents/{{$json[\"incident_id\"]}}/severity-suggestion",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [{ "name": "Content-Type", "value": "application/json" }]
+        },
+        "options": {}
+      },
+      "id": "severity-suggestion",
+      "name": "AI: Suggest Severity",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [700, 260]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.BACKEND_BASE_URL }}/incidents/{{$json[\"incident_id\"]}}/mitre-suggestions",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [{ "name": "Content-Type", "value": "application/json" }]
+        },
+        "options": {}
+      },
+      "id": "mitre-suggestions",
+      "name": "AI: Suggest MITRE Techniques",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [940, 260]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.BACKEND_BASE_URL }}/incidents/{{$json[\"incident_id\"]}}/report-draft",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [{ "name": "Content-Type", "value": "application/json" }]
+        },
+        "options": {}
+      },
+      "id": "report-draft",
+      "name": "AI: Draft Report",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1180, 260]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.NOTIFY_WEBHOOK_URL }}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ { \"text\": \"New incident ready for analyst review: \" + $json[\"incident_id\"] + \" — open the AI SOC Workbench dashboard. Nothing has been actioned automatically.\" } }}",
+        "options": {}
+      },
+      "id": "notify-soc",
+      "name": "Notify SOC Channel (Slack/Teams webhook)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1420, 260]
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "checkpoint",
+              "value": "HUMAN CHECKPOINT — incident is now pending_review in the dashboard. This workflow performs no further action; approve/edit/reject happens in the AI SOC Workbench UI, never here."
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "human-checkpoint",
+      "name": "Human Checkpoint (informational — no auto action)",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.3,
+      "position": [1660, 260]
+    }
+  ],
+  "connections": {
+    "Webhook: New Alert Ingested": {
+      "main": [[{ "node": "Extract IOCs", "type": "main", "index": 0 }]]
+    },
+    "Extract IOCs": {
+      "main": [[{ "node": "Enrich IOCs (mocked TI adapters by default)", "type": "main", "index": 0 }]]
+    },
+    "Enrich IOCs (mocked TI adapters by default)": {
+      "main": [[{ "node": "AI: Suggest Severity", "type": "main", "index": 0 }]]
+    },
+    "AI: Suggest Severity": {
+      "main": [[{ "node": "AI: Suggest MITRE Techniques", "type": "main", "index": 0 }]]
+    },
+    "AI: Suggest MITRE Techniques": {
+      "main": [[{ "node": "AI: Draft Report", "type": "main", "index": 0 }]]
+    },
+    "AI: Draft Report": {
+      "main": [[{ "node": "Notify SOC Channel (Slack/Teams webhook)", "type": "main", "index": 0 }]]
+    },
+    "Notify SOC Channel (Slack/Teams webhook)": {
+      "main": [[{ "node": "Human Checkpoint (informational — no auto action)", "type": "main", "index": 0 }]]
+    }
+  },
+  "settings": { "executionOrder": "v1" }
+}

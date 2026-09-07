@@ -8,6 +8,7 @@ enforceable rather than aspirational.
 All incident-derived text (rule descriptions, raw log fragments, enrichment
 notes) is untrusted and is wrapped via app.ai.guardrails before inclusion.
 """
+
 from dataclasses import dataclass, field
 
 from sqlalchemy.orm import Session
@@ -39,9 +40,7 @@ def build_incident_context(db: Session, incident: Incident) -> IncidentContext:
     injection_flags: list[str] = []
     lines: list[str] = [f"Incident: {incident.title} (status={incident.status.value})"]
 
-    events = (
-        db.query(Event).filter(Event.incident_id == incident.id).order_by(Event.timestamp).all()
-    )
+    events = db.query(Event).filter(Event.incident_id == incident.id).order_by(Event.timestamp).all()
     for ev in events:
         token = f"event:{ev.id}"
         rule_desc = str(ev.raw_data.get("rule_description", ""))

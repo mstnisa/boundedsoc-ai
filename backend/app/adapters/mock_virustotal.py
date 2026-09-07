@@ -4,6 +4,7 @@ so the same IOC always yields the same verdict across runs — useful for
 reproducible tests and the benchmark in Phase H. No network calls, no key
 required.
 """
+
 import hashlib
 
 from app.adapters.base import EnrichmentOutcome, ThreatIntelAdapter
@@ -14,7 +15,14 @@ _KNOWN_MALICIOUS_HINTS = ("evil", "malware", "c2", "phish", "badguy", "trojan")
 
 class MockVirusTotalAdapter(ThreatIntelAdapter):
     name = "mock_virustotal"
-    supported_types = {IOCType.ip, IOCType.domain, IOCType.url, IOCType.hash_md5, IOCType.hash_sha1, IOCType.hash_sha256}
+    supported_types = {
+        IOCType.ip,
+        IOCType.domain,
+        IOCType.url,
+        IOCType.hash_md5,
+        IOCType.hash_sha1,
+        IOCType.hash_sha256,
+    }
 
     def lookup(self, ioc_type: IOCType, value: str) -> EnrichmentOutcome:
         digest = hashlib.sha256(f"{ioc_type.value}:{value}".encode()).hexdigest()

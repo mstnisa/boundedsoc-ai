@@ -1,12 +1,12 @@
 import uuid
 from datetime import datetime
 
-from sqlalchemy import ForeignKey, Integer, DateTime
+from sqlalchemy import DateTime, ForeignKey, Integer
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db.base import Base
-from app.models.mixins import TimestampMixin, UUIDPKMixin, utcnow
+from app.models.mixins import UUIDPKMixin, utcnow
 
 
 class Timeline(UUIDPKMixin, Base):
@@ -31,9 +31,7 @@ class TimelineEvent(UUIDPKMixin, Base):
     timeline_id: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True), ForeignKey("timelines.id"), nullable=False, index=True
     )
-    event_id: Mapped[uuid.UUID] = mapped_column(
-        UUID(as_uuid=True), ForeignKey("events.id"), nullable=False
-    )
+    event_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("events.id"), nullable=False)
     sequence: Mapped[int] = mapped_column(Integer, nullable=False)
 
     timeline: Mapped["Timeline"] = relationship(back_populates="ordered_events")

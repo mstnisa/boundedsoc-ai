@@ -7,6 +7,7 @@ inspectable code path rather than a stub comment, without ever making a
 network call unless the operator explicitly opts in and supplies their own
 key in .env.
 """
+
 import httpx
 
 from app.adapters.base import EnrichmentOutcome, ThreatIntelAdapter

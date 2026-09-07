@@ -5,6 +5,7 @@ required — this matches the brief's "single-user mode may skip [JWT]
 initially." Set AUTH_SINGLE_USER_MODE=false and issue tokens via /auth/login
 (see app.api.routes.auth) once more than one role is needed.
 """
+
 from datetime import datetime, timedelta, timezone
 
 from fastapi import Depends, HTTPException, status

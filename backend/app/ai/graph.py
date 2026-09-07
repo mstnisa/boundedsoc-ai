@@ -12,6 +12,7 @@ parse_and_validate never raises on bad model output: a JSON/schema failure
 produces an empty result with an error note, which the caller logs to the
 audit trail instead of retrying blindly or fabricating a fallback claim.
 """
+
 import json
 from typing import Any, Callable, TypedDict
 

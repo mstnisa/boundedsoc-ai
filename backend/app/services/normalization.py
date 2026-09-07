@@ -3,6 +3,7 @@ Normalization layer: maps varying Wazuh-style alert shapes into one internal
 schema. This is deterministic code — no LLM involvement — per the AI design
 rule "use deterministic code for parsing, validation, timestamps...".
 """
+
 from datetime import datetime, timezone
 from typing import Any
 
@@ -34,22 +35,31 @@ def normalize_wazuh_alert(raw: dict) -> dict:
 
     ts_raw = raw.get("timestamp")
     try:
-        timestamp = datetime.fromisoformat(ts_raw.replace("Z", "+00:00")) if ts_raw else datetime.now(
-            timezone.utc
+        timestamp = (
+            datetime.fromisoformat(ts_raw.replace("Z", "+00:00")) if ts_raw else datetime.now(timezone.utc)
         )
     except (ValueError, AttributeError):
         timestamp = datetime.now(timezone.utc)
 
+    rule_description = rule.get("description")
+    if rule_description is not None and not isinstance(rule_description, str):
+        # Defensive: malformed/adversarial input can send an object here
+        # instead of a string. Never let a non-string reach downstream code
+        # that assumes str (e.g. slicing for an incident title).
+        rule_description = str(rule_description)
+
     return {
         "rule_id": rule.get("id"),
-        "rule_description": rule.get("description"),
+        "rule_description": rule_description,
         "rule_level": rule.get("level"),
         "mitre_hint": rule.get("mitre", {}).get("id", []) if isinstance(rule.get("mitre"), dict) else [],
         "agent_name": agent.get("name"),
         "agent_ip": agent.get("ip"),
-        "event_type": data.get("event_type") or rule.get("groups", ["unknown"])[0]
-        if isinstance(rule.get("groups"), list) and rule.get("groups")
-        else data.get("event_type", "unknown"),
+        "event_type": (
+            data.get("event_type") or rule.get("groups", ["unknown"])[0]
+            if isinstance(rule.get("groups"), list) and rule.get("groups")
+            else data.get("event_type", "unknown")
+        ),
         "source_host": agent.get("name") or data.get("hostname"),
         "timestamp": timestamp.isoformat(),
         "full_log": raw.get("full_log", ""),

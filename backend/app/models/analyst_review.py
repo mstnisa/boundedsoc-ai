@@ -1,7 +1,7 @@
 import uuid
 from datetime import datetime
 
-from sqlalchemy import ForeignKey, String, Text, DateTime
+from sqlalchemy import DateTime, ForeignKey, String, Text
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -17,7 +17,9 @@ class AnalystReview(UUIDPKMixin, Base):
     user_id: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True), ForeignKey("users.id"), nullable=False, index=True
     )
-    target_entity_type: Mapped[str] = mapped_column(String(50), nullable=False)  # incident|mitre_suggestion|report|...
+    target_entity_type: Mapped[str] = mapped_column(
+        String(50), nullable=False
+    )  # incident|mitre_suggestion|report|...
     target_entity_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), nullable=False, index=True)
     decision: Mapped[str] = mapped_column(String(20), nullable=False)  # approve|edit|reject
     comment: Mapped[str | None] = mapped_column(Text, nullable=True)

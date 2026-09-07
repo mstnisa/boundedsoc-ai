@@ -5,6 +5,7 @@ All configuration is read from environment variables (via .env in local/dev,
 real environment variables in production). Nothing sensitive is ever
 hard-coded here — see .env.example for the full list of expected variables.
 """
+
 from functools import lru_cache
 from typing import Literal
 

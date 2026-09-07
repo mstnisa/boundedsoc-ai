@@ -1,4 +1,5 @@
 """Adapter pattern for threat-intelligence providers."""
+
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from typing import Any
@@ -20,5 +21,4 @@ class ThreatIntelAdapter(ABC):
     supported_types: set[IOCType]
 
     @abstractmethod
-    def lookup(self, ioc_type: IOCType, value: str) -> EnrichmentOutcome:
-        ...
+    def lookup(self, ioc_type: IOCType, value: str) -> EnrichmentOutcome: ...

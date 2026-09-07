@@ -4,6 +4,7 @@ a consequential action (ingest, extract, enrich, suggest, generate, review)
 MUST call record() with a real reason. Rows are never updated or deleted —
 enforced socially here and at the DB layer (no update/delete helpers exist).
 """
+
 from sqlalchemy.orm import Session
 
 from app.models.audit_log import AuditLog

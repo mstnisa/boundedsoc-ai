@@ -4,6 +4,7 @@ shared host + a time-proximity window, deduplicates repeated alerts, and
 turns each alert into one or more Event rows for the timeline builder.
 Deterministic, rule-based — no LLM involvement.
 """
+
 from datetime import datetime, timedelta, timezone
 
 from sqlalchemy import select
@@ -16,7 +17,9 @@ from app.models.incident import Incident, IncidentStatus
 CORRELATION_WINDOW = timedelta(hours=2)
 
 
-def find_or_create_incident(db: Session, *, host: str | None, alert_time: datetime, rule_description: str) -> Incident:
+def find_or_create_incident(
+    db: Session, *, host: str | None, alert_time: datetime, rule_description: str
+) -> Incident:
     """
     Groups an alert into an existing open incident on the same host within
     the correlation window, or opens a new one. This is intentionally
@@ -41,8 +44,9 @@ def find_or_create_incident(db: Session, *, host: str | None, alert_time: dateti
                 if ev.source_host == host and window_start <= ev.timestamp <= window_end:
                     return incident
 
+    safe_description = str(rule_description) if rule_description else ""
     incident = Incident(
-        title=f"Incident: {rule_description[:200]}" if rule_description else "Untitled incident",
+        title=f"Incident: {safe_description[:200]}" if safe_description else "Untitled incident",
         status=IncidentStatus.new,
     )
     db.add(incident)
@@ -56,7 +60,9 @@ def alert_to_event(db: Session, alert: Alert, incident: Incident) -> Event:
         incident_id=incident.id,
         event_type=norm.get("event_type", "unknown"),
         source_host=norm.get("source_host"),
-        timestamp=datetime.fromisoformat(norm["timestamp"]) if norm.get("timestamp") else datetime.now(timezone.utc),
+        timestamp=(
+            datetime.fromisoformat(norm["timestamp"]) if norm.get("timestamp") else datetime.now(timezone.utc)
+        ),
         raw_data=norm,
     )
     db.add(event)

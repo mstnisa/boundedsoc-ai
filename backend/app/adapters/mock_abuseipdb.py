@@ -1,4 +1,5 @@
 """Deterministic mock of an AbuseIPDB-style IP reputation lookup."""
+
 import hashlib
 
 from app.adapters.base import EnrichmentOutcome, ThreatIntelAdapter

@@ -5,17 +5,18 @@ import an individual app.models.* module before this one has run — to avoid
 the circular-import trap of models importing Base while Base's own module
 tries to import models.
 """
+
 from app.db.base import Base  # noqa: F401
-from app.models.user import User  # noqa: E402,F401
 from app.models.alert import Alert  # noqa: E402,F401
-from app.models.incident import Incident  # noqa: E402,F401
-from app.models.event import Event  # noqa: E402,F401
-from app.models.ioc import IOC  # noqa: E402,F401
-from app.models.enrichment_result import EnrichmentResult  # noqa: E402,F401
-from app.models.mitre_suggestion import MitreSuggestion  # noqa: E402,F401
-from app.models.timeline import Timeline, TimelineEvent  # noqa: E402,F401
-from app.models.report import Report  # noqa: E402,F401
-from app.models.evidence_item import EvidenceItem  # noqa: E402,F401
 from app.models.analyst_review import AnalystReview  # noqa: E402,F401
 from app.models.audit_log import AuditLog  # noqa: E402,F401
+from app.models.enrichment_result import EnrichmentResult  # noqa: E402,F401
+from app.models.event import Event  # noqa: E402,F401
+from app.models.evidence_item import EvidenceItem  # noqa: E402,F401
+from app.models.incident import Incident  # noqa: E402,F401
 from app.models.integration import Integration  # noqa: E402,F401
+from app.models.ioc import IOC  # noqa: E402,F401
+from app.models.mitre_suggestion import MitreSuggestion  # noqa: E402,F401
+from app.models.report import Report  # noqa: E402,F401
+from app.models.timeline import Timeline, TimelineEvent  # noqa: E402,F401
+from app.models.user import User  # noqa: E402,F401

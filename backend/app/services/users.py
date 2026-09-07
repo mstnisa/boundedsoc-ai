@@ -1,5 +1,6 @@
 """Resolves/creates the local single-user-mode analyst as a real DB row so
 foreign keys (analyst_reviews.user_id) always have something to point to."""
+
 from sqlalchemy.orm import Session
 
 from app.core.security import hash_password

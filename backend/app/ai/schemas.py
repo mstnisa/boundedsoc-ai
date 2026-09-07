@@ -1,6 +1,7 @@
 """Pydantic schemas the LangGraph parse node validates raw LLM JSON against.
 These are intentionally strict — validation failure means the claim is
 discarded (see app.services.ai_orchestration), never coerced or guessed."""
+
 from typing import Literal
 
 from pydantic import BaseModel, Field

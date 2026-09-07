@@ -7,6 +7,7 @@ calls an enrichment/response API automatically, and every write is preceded
 by an audit_logs entry explaining what happened and why (including when a
 claim was DROPPED for lacking evidence).
 """
+
 from datetime import datetime, timezone
 
 from sqlalchemy.orm import Session
@@ -75,7 +76,11 @@ def suggest_severity(db: Session, incident: Incident, actor: str) -> dict:
     valid_refs = [ref for ref in claim["evidence_refs"] if ref in ctx.evidence_index]
     for ref in valid_refs:
         _record_evidence(
-            db, entity_type="incident_severity", entity_id=incident.id, token=ref, evidence_index=ctx.evidence_index
+            db,
+            entity_type="incident_severity",
+            entity_id=incident.id,
+            token=ref,
+            evidence_index=ctx.evidence_index,
         )
 
     if not valid_refs:
@@ -109,7 +114,13 @@ def suggest_severity(db: Session, incident: Incident, actor: str) -> dict:
     )
     db.commit()
     db.refresh(incident)
-    return {"suggested": True, "severity": claim["severity"], "confidence": claim["confidence"], "rationale": claim["rationale"], "evidence_refs": valid_refs}
+    return {
+        "suggested": True,
+        "severity": claim["severity"],
+        "confidence": claim["confidence"],
+        "rationale": claim["rationale"],
+        "evidence_refs": valid_refs,
+    }
 
 
 def suggest_mitre(db: Session, incident: Incident, actor: str) -> list[MitreSuggestion]:
@@ -167,7 +178,11 @@ def suggest_mitre(db: Session, incident: Incident, actor: str) -> list[MitreSugg
         db.flush()
         for ref in valid_refs:
             _record_evidence(
-                db, entity_type="mitre_suggestion", entity_id=suggestion.id, token=ref, evidence_index=ctx.evidence_index
+                db,
+                entity_type="mitre_suggestion",
+                entity_id=suggestion.id,
+                token=ref,
+                evidence_index=ctx.evidence_index,
             )
         created.append(suggestion)
 

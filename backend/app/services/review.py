@@ -5,6 +5,7 @@ Edits/rejections mutate the target entity's status so the dashboard and
 API always reflect the human's final word, never silently keep the AI's
 original claim as authoritative.
 """
+
 import uuid
 
 from sqlalchemy.orm import Session

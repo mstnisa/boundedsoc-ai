@@ -12,5 +12,7 @@ class Integration(UUIDPKMixin, TimestampMixin, Base):
 
     name: Mapped[str] = mapped_column(String(100), unique=True, nullable=False)
     type: Mapped[str] = mapped_column(String(50), nullable=False)  # threat_intel|llm|siem
-    config_ref: Mapped[str] = mapped_column(String(255), nullable=False)  # env var name, never the secret itself
+    config_ref: Mapped[str] = mapped_column(
+        String(255), nullable=False
+    )  # env var name, never the secret itself
     enabled: Mapped[bool] = mapped_column(Boolean, default=True)

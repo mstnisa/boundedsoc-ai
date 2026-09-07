@@ -1,6 +1,7 @@
 """Report export: markdown (native), JSON (full evidence-backed structure),
 and PDF (rendered from the markdown with fpdf2 — pure-Python, no system
 dependencies)."""
+
 import json
 from io import BytesIO
 

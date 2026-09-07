@@ -10,6 +10,7 @@ returns JSON shaped exactly like a real provider's structured-output
 response would be. This keeps app.ai.graph's parsing/validation/evidence
 logic identical whether the real backing model is mocked or live.
 """
+
 import json
 import re
 

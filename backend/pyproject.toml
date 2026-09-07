@@ -1,0 +1,24 @@
+[tool.ruff]
+line-length = 110
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I"]
+# E501 (line too long) is left to black for code; several long literal
+# strings (AI-facing prompt/report text) are clearer unwrapped than
+# manually broken across lines, so we don't fail the build on those.
+ignore = ["E501"]
+
+[tool.ruff.lint.per-file-ignores]
+# SQLAlchemy 2.0 declarative relationships use string forward-refs
+# (Mapped["Incident"]) resolved lazily by the mapper registry at
+# configure_mappers() time -- not by a Python-level import. Models
+# deliberately do NOT import each other directly (see app/db/all_models.py's
+# docstring) to avoid circular imports, so these names are legitimately
+# "undefined" from ruff's static point of view while being perfectly valid
+# at runtime once app.db.all_models has been imported once.
+"app/models/*.py" = ["F821"]
+
+[tool.black]
+line-length = 110
+target-version = ["py312"]

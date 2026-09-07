@@ -9,14 +9,13 @@ from app.db.session import get_db
 from app.models.event import Event
 from app.models.incident import Incident, IncidentStatus, Severity
 from app.models.ioc import IOC
-from app.models.mitre_suggestion import MitreSuggestion
 from app.models.report import Report
 from app.models.timeline import Timeline
 from app.schemas.incident import IncidentDetail, IncidentSummary
-from app.schemas.ioc import EnrichResponse, EnrichmentResultOut, ExtractIOCsResponse, IOCOut
+from app.schemas.ioc import EnrichmentResultOut, EnrichResponse, ExtractIOCsResponse
 from app.schemas.mitre import MitreSuggestionOut, MitreSuggestionResponse
 from app.schemas.report import ReportOut
-from app.schemas.review import ReviewIn, ReviewOut, SeverityUpdateIn
+from app.schemas.review import ReviewIn, ReviewOut
 from app.schemas.timeline import TimelineEventOut, TimelineOut
 from app.services import ai_orchestration, audit, enrichment, export, review, timeline_builder, users
 from app.services.ioc_extraction import extract_from_normalized_event
@@ -47,7 +46,9 @@ def _get_incident_or_404(db: Session, incident_id: uuid.UUID) -> Incident:
 
 
 @router.get("/incidents/{incident_id}", response_model=IncidentDetail)
-def get_incident(incident_id: uuid.UUID, db: Session = Depends(get_db), _: CurrentUser = Depends(get_current_user)):
+def get_incident(
+    incident_id: uuid.UUID, db: Session = Depends(get_db), _: CurrentUser = Depends(get_current_user)
+):
     incident = _get_incident_or_404(db, incident_id)
     detail = IncidentDetail.model_validate(incident)
     detail.alert_count = len(incident.alerts)
@@ -117,16 +118,20 @@ def enrich_incident(
     db.commit()
     for r in all_results:
         db.refresh(r)
-    return EnrichResponse(incident_id=incident_id, results=[EnrichmentResultOut.model_validate(r) for r in all_results])
+    return EnrichResponse(
+        incident_id=incident_id, results=[EnrichmentResultOut.model_validate(r) for r in all_results]
+    )
 
 
 @router.get("/incidents/{incident_id}/timeline", response_model=TimelineOut)
 def get_timeline(
     incident_id: uuid.UUID, db: Session = Depends(get_db), user: CurrentUser = Depends(get_current_user)
 ):
-    incident = _get_incident_or_404(db, incident_id)
+    _get_incident_or_404(db, incident_id)  # 404s early if the incident doesn't exist
     existing = (
-        db.execute(select(Timeline).where(Timeline.incident_id == incident_id).order_by(Timeline.generated_at.desc()))
+        db.execute(
+            select(Timeline).where(Timeline.incident_id == incident_id).order_by(Timeline.generated_at.desc())
+        )
         .scalars()
         .first()
     )
@@ -154,7 +159,9 @@ def get_timeline(
         )
         for te in existing.ordered_events
     ]
-    return TimelineOut(id=existing.id, incident_id=incident_id, generated_at=existing.generated_at, events=events_out)
+    return TimelineOut(
+        id=existing.id, incident_id=incident_id, generated_at=existing.generated_at, events=events_out
+    )
 
 
 @router.post("/incidents/{incident_id}/severity-suggestion")
@@ -216,9 +223,7 @@ def export_incident(
 ):
     incident = _get_incident_or_404(db, incident_id)
     report = (
-        db.execute(
-            select(Report).where(Report.incident_id == incident_id).order_by(Report.version.desc())
-        )
+        db.execute(select(Report).where(Report.incident_id == incident_id).order_by(Report.version.desc()))
         .scalars()
         .first()
     )

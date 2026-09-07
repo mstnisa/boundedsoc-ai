@@ -40,4 +40,4 @@ class AlertOut(ORMModel):
 class AlertIngestResponse(BaseModel):
     ingested: int
     alert_ids: list[uuid.UUID]
-    incident_id: uuid.UUID
+    incident_id: uuid.UUID | None = None

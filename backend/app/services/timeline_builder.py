@@ -1,4 +1,5 @@
 """Deterministic timeline construction: sorts an incident's events by time."""
+
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 

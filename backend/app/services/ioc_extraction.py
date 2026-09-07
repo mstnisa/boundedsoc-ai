@@ -4,18 +4,15 @@ rules, extraction is deterministic code). Extracts IPs, domains, URLs,
 file hashes (md5/sha1/sha256), and usernames from normalized alert/event
 text.
 """
+
 import re
 from dataclasses import dataclass
 
 from app.models.ioc import IOCType
 
-_IPV4_RE = re.compile(
-    r"\b(?:(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)\.){3}(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)\b"
-)
+_IPV4_RE = re.compile(r"\b(?:(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)\.){3}(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)\b")
 _URL_RE = re.compile(r"\bhttps?://[^\s\"'<>]+")
-_DOMAIN_RE = re.compile(
-    r"\b(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,24}\b"
-)
+_DOMAIN_RE = re.compile(r"\b(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,24}\b")
 _SHA256_RE = re.compile(r"\b[a-fA-F0-9]{64}\b")
 _SHA1_RE = re.compile(r"\b[a-fA-F0-9]{40}\b")
 _MD5_RE = re.compile(r"\b[a-fA-F0-9]{32}\b")
@@ -38,10 +35,47 @@ _NON_DOMAIN_SUFFIXES = {"exe", "dll", "ps1", "bat", "sh", "py", "js", "json", "l
 # incidental dotted strings like a "j.rahman" username out of the domain
 # IOC list. Extend as needed — this is not meant to be exhaustive.
 _KNOWN_TLDS = {
-    "com", "net", "org", "io", "co", "info", "biz", "xyz", "top", "cc", "me",
-    "dev", "app", "gov", "edu", "mil", "int", "onion",
-    "ru", "cn", "uk", "de", "fr", "nl", "br", "in", "jp", "kr", "au", "ca",
-    "bd", "pk", "ir", "kp", "ua", "pl", "tk", "ml", "ga", "cf", "su",
+    "com",
+    "net",
+    "org",
+    "io",
+    "co",
+    "info",
+    "biz",
+    "xyz",
+    "top",
+    "cc",
+    "me",
+    "dev",
+    "app",
+    "gov",
+    "edu",
+    "mil",
+    "int",
+    "onion",
+    "ru",
+    "cn",
+    "uk",
+    "de",
+    "fr",
+    "nl",
+    "br",
+    "in",
+    "jp",
+    "kr",
+    "au",
+    "ca",
+    "bd",
+    "pk",
+    "ir",
+    "kp",
+    "ua",
+    "pl",
+    "tk",
+    "ml",
+    "ga",
+    "cf",
+    "su",
 }
 
 _PRIVATE_OR_RESERVED_PREFIXES = ("10.", "127.", "169.254.", "0.")

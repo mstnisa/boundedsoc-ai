@@ -17,6 +17,7 @@ convention:
      the drop is written to the audit log with the reason, rather than
      silently defaulting to some evidence.
 """
+
 import re
 
 _INJECTION_PATTERNS = [

@@ -5,6 +5,7 @@ thin: schema validation and evidence enforcement happen in app.ai.graph
 regardless of provider, so swapping providers never changes the safety
 guarantees.
 """
+
 from app.ai.providers.base import LLMProvider, LLMResponse
 
 

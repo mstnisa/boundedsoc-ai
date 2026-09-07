@@ -3,6 +3,7 @@ callers (app.ai.graph) are responsible for schema-validating the output
 against a Pydantic model and treating parse failures as "no claim", never
 as a reason to invent one.
 """
+
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 
@@ -20,5 +21,6 @@ class LLMProvider(ABC):
     model_name: str
 
     @abstractmethod
-    def complete(self, *, system_prompt: str, user_prompt: str, prompt_template_version: str) -> LLMResponse:
-        ...
+    def complete(
+        self, *, system_prompt: str, user_prompt: str, prompt_template_version: str
+    ) -> LLMResponse: ...
