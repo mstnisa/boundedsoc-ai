@@ -226,6 +226,7 @@ See `docs/roadmap.md`.
 
 ## Documentation index
 
+- `docs/business-value.md` — how this maps to banking/corporate security requirements, and CV/interview framing
 - `docs/architecture.md` — deeper architecture + ER diagram
 - `docs/threat-model.md` — STRIDE-style threat model
 - `docs/setup-guide.md` — full setup instructions (Docker and non-Docker)
