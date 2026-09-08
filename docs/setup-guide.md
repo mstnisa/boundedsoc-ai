@@ -14,7 +14,7 @@ Docker images — see the note at the bottom).
 
 ```bash
 git clone <this-repo>
-cd ai-soc-workbench
+cd boundedsoc-ai
 cp .env.example .env
 docker-compose up
 ```

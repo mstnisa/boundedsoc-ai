@@ -1,6 +1,6 @@
 # Business Value — Why This Matters to Banks and Corporate Security Teams
 
-This document translates the technical architecture of AI SOC Workbench into
+This document translates the technical architecture of BoundedSOC AI into
 the language a hiring manager, CISO, or bank IT-security auditor actually
 cares about. It is written to sit alongside the technical README, not
 replace it — every claim here traces back to a real, working part of the
@@ -87,7 +87,7 @@ black-box scoring, and audit-first engineering. Suggested CV phrasing:
 
 ## A short pitch for LinkedIn / a portfolio page
 
-> AI SOC Workbench is a working demonstration of how banks and large
+> BoundedSOC AI is a working demonstration of how banks and large
 > corporates can bring AI into security operations without giving up
 > control: every AI-generated finding — severity, MITRE technique mapping,
 > incident report — must cite real evidence and is held pending until a

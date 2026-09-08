@@ -1,4 +1,4 @@
-# AI SOC Workbench
+# BoundedSOC AI
 
 > 👋 **New here, or not a developer?** Skip straight to
 > **[`START_HERE.md`](START_HERE.md)** — a step-by-step guide with zero
@@ -140,7 +140,7 @@ pytest / Ruff + Black / GitHub Actions.
 
 ```bash
 git clone <this-repo>
-cd ai-soc-workbench
+cd boundedsoc-ai
 cp .env.example .env      # defaults work out of the box, zero paid API keys required
 docker-compose up
 ```

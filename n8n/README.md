@@ -11,7 +11,7 @@ The workflow sequences existing, audited FastAPI backend endpoints:
 /incidents/{id}/mitre-suggestions` → `POST /incidents/{id}/report-draft` →
 notify the SOC channel → a "human checkpoint" node that does nothing except
 mark, in the n8n execution log, that everything past this point happens in
-the AI SOC Workbench dashboard by a human analyst.
+the BoundedSOC AI dashboard by a human analyst.
 
 **n8n contains zero security logic.** It does not compute severity, does not
 decide a verdict, does not call a real TI provider directly, and — critically

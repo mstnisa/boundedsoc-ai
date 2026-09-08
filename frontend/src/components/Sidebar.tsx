@@ -13,9 +13,9 @@ export default function Sidebar() {
           </svg>
         </div>
         <div className="sidebar-brand-text">
-          AI SOC
+          BoundedSOC
           <br />
-          Workbench
+          AI
         </div>
       </div>
 

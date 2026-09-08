@@ -1,4 +1,4 @@
-# Interview Prep: AI SOC Workbench
+# Interview Prep: BoundedSOC AI
 
 A study document for talking about this project out loud — to a recruiter,
 a hiring manager, a SOC lead, or a CISO. Everything below reflects what was

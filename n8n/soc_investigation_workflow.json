@@ -1,5 +1,5 @@
 {
-  "name": "AI SOC Workbench — Trigger → Enrich → Notify → Human Checkpoint",
+  "name": "BoundedSOC AI — Trigger → Enrich → Notify → Human Checkpoint",
   "nodes": [
     {
       "parameters": {
@@ -112,7 +112,7 @@
         "url": "={{ $env.NOTIFY_WEBHOOK_URL }}",
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={{ { \"text\": \"New incident ready for analyst review: \" + $json[\"incident_id\"] + \" — open the AI SOC Workbench dashboard. Nothing has been actioned automatically.\" } }}",
+        "jsonBody": "={{ { \"text\": \"New incident ready for analyst review: \" + $json[\"incident_id\"] + \" — open the BoundedSOC AI dashboard. Nothing has been actioned automatically.\" } }}",
         "options": {}
       },
       "id": "notify-soc",
@@ -127,7 +127,7 @@
           "string": [
             {
               "name": "checkpoint",
-              "value": "HUMAN CHECKPOINT — incident is now pending_review in the dashboard. This workflow performs no further action; approve/edit/reject happens in the AI SOC Workbench UI, never here."
+              "value": "HUMAN CHECKPOINT — incident is now pending_review in the dashboard. This workflow performs no further action; approve/edit/reject happens in the BoundedSOC AI UI, never here."
             }
           ]
         },

@@ -15,7 +15,7 @@ bottom — the most common problems are covered there.
 
 ## What you're about to run
 
-This is **AI SOC Workbench** — a demo security dashboard that shows how an
+This is **BoundedSOC AI** — a demo security dashboard that shows how an
 AI assistant can help a security analyst investigate an incident, while a
 human stays in control of every decision. Everything in the demo is
 synthetic (fake, safe) data — no real computers, accounts, or networks are
@@ -48,11 +48,11 @@ You do **not** need to know Git for this. Use the ZIP download:
    (near the top of the file list).
 2. Click **"Download ZIP"**.
 3. Find the downloaded file (usually in your **Downloads** folder) — it will
-   be named something like `ai-soc-workbench-main.zip`.
+   be named something like `boundedsoc-ai-main.zip`.
 4. Extract it:
    - **Windows**: right-click the ZIP → **"Extract All..."** → Extract.
    - **Mac**: double-click the ZIP — it unzips automatically.
-5. You'll now have a folder named something like `ai-soc-workbench-main`.
+5. You'll now have a folder named something like `boundedsoc-ai-main`.
    **Remember where this folder is** — you'll need to open it in the next
    step.
 
@@ -131,7 +131,7 @@ Open your web browser (Chrome, Edge, Safari — any browser) and go to:
 
 **http://localhost:5173**
 
-You should see the **AI SOC Workbench** dashboard: a sidebar on the left,
+You should see the **BoundedSOC AI** dashboard: a sidebar on the left,
 and a mostly-empty overview (0 incidents) on the right. That's expected —
 you haven't loaded any sample data yet. That's the next step.
 

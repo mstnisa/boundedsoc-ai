@@ -1,6 +1,6 @@
 # Contributing
 
-Thanks for considering a contribution to AI SOC Workbench. This is a
+Thanks for considering a contribution to BoundedSOC AI. This is a
 portfolio/research project built around a specific, non-negotiable
 principle: **the AI assists, it never decides.** Any contribution that
 weakens that boundary (autonomous response actions, AI claims without
@@ -11,7 +11,7 @@ seems.
 
 ```bash
 git clone <this-repo>
-cd ai-soc-workbench
+cd boundedsoc-ai
 cp .env.example .env   # edit if you want non-default values; defaults work out of the box
 docker-compose up
 ```

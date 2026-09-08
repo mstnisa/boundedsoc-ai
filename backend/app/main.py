@@ -10,7 +10,7 @@ from app.services import mcp_gateway
 settings = get_settings()
 
 app = FastAPI(
-    title="AI SOC Workbench",
+    title="BoundedSOC AI",
     description=(
         "Explainable, human-in-the-loop security investigation automation. "
         "The AI assists; it never autonomously declares an incident malicious, "
