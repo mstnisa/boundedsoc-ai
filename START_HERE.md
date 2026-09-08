@@ -181,6 +181,59 @@ built-in, deterministic mock "AI" so this is completely safe to explore.
 
 ---
 
+## Step 8.5 — Try the extra AI modules (also point-and-click)
+
+Five extra AI modules live inside the same dashboard. All of them follow the
+same rule as everything else here: the AI only *suggests* — nothing happens
+for real until you click a button to confirm it.
+
+**A small "ML: routine" or "ML: escalated" badge** — you'll notice this next
+to incidents on the Dashboard and Incident Queue. A small built-in model
+looks at each new incident and guesses whether it looks routine (like a
+repeated port scan) or worth a closer look. It never hides or removes
+anything — it's just a hint about where to look first.
+
+**Remediation tab** (open an incident → click the **Remediation** tab):
+1. Click **Draft Remediation Suggestion** — the AI proposes an example code
+   fix for the security issue (this is only shown if you've already approved
+   a MITRE suggestion on the MITRE tab for this incident — do that first if
+   the button says nothing was found).
+2. Click **Approve** on the suggestion.
+3. A new button appears: **Create Pull Request**. Click it. By default this
+   is *simulated* (safe, no real GitHub repo is touched) — you'll see a
+   fake pull-request link appear. A real integration can be turned on later
+   by an admin, but never by the AI on its own.
+
+**Credential Exposure tab** (same incident, next tab over):
+1. Click **Scan for Exposed Credentials** — this looks for things that look
+   like leaked passwords or API keys in the incident's data. The real
+   secret value is never shown or stored, only a masked version like
+   `api_…1b2050`.
+2. If something is found, click **Approve**, then a **Revoke Now** button
+   appears. Click it to (safely, simulated by default) revoke it. It cannot
+   be revoked before you approve it — that's enforced by the system, not
+   just hidden in the screen.
+
+**Compliance tab** (same incident, next tab over):
+1. Pick a framework from the dropdown (OWASP Top 10, PCI DSS, ISO 27001, or
+   GDPR).
+2. Click **Map Approved Findings**. This links your already-approved MITRE
+   findings to real controls in that framework — useful evidence when
+   preparing for an audit. It's clearly labeled as informational, not an
+   official certification.
+3. See the overall picture any time from the **Compliance** link in the left
+   sidebar — it shows, per framework, how many controls have at least one
+   piece of evidence behind them.
+
+**AI Tool Policies** (left sidebar → **Integrations**, scroll down):
+This is the allow-list that controls what the two modules above are allowed
+to do. By default it only allows creating a pull request and revoking a
+secret — nothing else. Below it, the **AI Action Log** shows every attempt,
+whether it was allowed or blocked, so you can always see what the AI tried
+to do outside the system.
+
+---
+
 ## Step 9 — Stop the project when you're done
 
 Go back to the terminal window from Step 5, and:
