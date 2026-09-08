@@ -13,6 +13,8 @@ class IncidentSummary(ORMModel):
     status: IncidentStatus
     created_at: datetime
     closed_at: datetime | None = None
+    ml_triage_label: str | None = None
+    ml_confidence: float | None = None
 
 
 class IncidentDetail(IncidentSummary):

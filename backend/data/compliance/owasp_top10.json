@@ -1,0 +1,26 @@
+{
+  "_description": "Illustrative subset of OWASP Top 10 (2021) categories mapped to MITRE ATT&CK technique IDs this project's mock AI provider can actually produce (see app/ai/providers/mock_provider.py). Not exhaustive — same 'bundled local subset, extend as needed' pattern as data/mitre/attack_subset.json.",
+  "framework": "owasp_top10",
+  "controls": [
+    {
+      "control_id": "A07:2021",
+      "control_title": "Identification and Authentication Failures",
+      "mitre_technique_ids": ["T1110", "T1078"]
+    },
+    {
+      "control_id": "A03:2021",
+      "control_title": "Injection",
+      "mitre_technique_ids": ["T1059.001"]
+    },
+    {
+      "control_id": "A09:2021",
+      "control_title": "Security Logging and Monitoring Failures",
+      "mitre_technique_ids": ["T1027"]
+    },
+    {
+      "control_id": "A02:2021",
+      "control_title": "Cryptographic Failures",
+      "mitre_technique_ids": ["T1003.001"]
+    }
+  ]
+}

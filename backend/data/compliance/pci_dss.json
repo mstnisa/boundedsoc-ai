@@ -1,0 +1,26 @@
+{
+  "_description": "Illustrative subset of PCI DSS v4.0 requirements mapped to MITRE ATT&CK technique IDs this project's mock AI provider can actually produce (see app/ai/providers/mock_provider.py). Not a compliance certification — informational mapping only, see docs/business-value.md.",
+  "framework": "pci_dss",
+  "controls": [
+    {
+      "control_id": "8.3.4",
+      "control_title": "Invalid authentication attempts are limited and monitored",
+      "mitre_technique_ids": ["T1110"]
+    },
+    {
+      "control_id": "8.2.1",
+      "control_title": "All users are identified with a unique ID before access is allowed",
+      "mitre_technique_ids": ["T1078"]
+    },
+    {
+      "control_id": "10.2.1",
+      "control_title": "Audit logs capture all individual user access to system components",
+      "mitre_technique_ids": ["T1027", "T1059.001"]
+    },
+    {
+      "control_id": "3.5.1",
+      "control_title": "Stored account/credential data is protected with strong cryptography",
+      "mitre_technique_ids": ["T1003.001"]
+    }
+  ]
+}

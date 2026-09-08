@@ -8,7 +8,7 @@ from app.core.security import CurrentUser, get_current_user
 from app.db.session import get_db
 from app.models.alert import Alert
 from app.schemas.alert import AlertIngestRequest, AlertIngestResponse
-from app.services import audit, correlation, normalization
+from app.services import audit, correlation, ml_prefilter, normalization
 
 router = APIRouter()
 
@@ -51,6 +51,10 @@ def ingest_alerts(
         reason=f"Ingested {len(alert_ids)} synthetic Wazuh-style alert(s).",
         details={"alert_ids": [str(a) for a in alert_ids], "source": payload.source},
     )
+
+    if incident is not None:
+        db.refresh(incident)
+        ml_prefilter.classify_incident(db, incident, actor="system")
 
     return AlertIngestResponse(
         ingested=len(alert_ids), alert_ids=alert_ids, incident_id=incident.id if incident else None

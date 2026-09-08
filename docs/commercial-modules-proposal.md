@@ -1,11 +1,12 @@
-# Commercial Module Proposal — Draft for Sign-off
+# Commercial Module Proposal — Now Implemented
 
-Status: **DRAFT — not yet approved, not yet implemented.** This document proposes
-a data model, API surface, and UI sketch for five new modules, each designed
-to extend the existing evidence-gated / human-approval architecture without
-weakening it. Nothing here is built yet. Once you sign off (all five, a
-subset, or with changes), implementation proceeds incrementally, one module
-at a time, each with its own tests — per the agreed process.
+Status: **IMPLEMENTED.** All five modules below were approved and built in
+this order: MCP/API Security Gateway → ML Prefilter → Compliance Mapper →
+Remediation Drafting Agent → Credential Exposure Response, each with its own
+backend tests (`backend/tests/api/test_commercial_modules.py`, 6 tests, all
+passing alongside the original 55) and a corresponding UI tab or page. This
+document is kept as the design record; anywhere it originally said "will"
+now means "does."
 
 Every module below follows the three guarantees already built into this
 repo, and none of them may be relaxed:

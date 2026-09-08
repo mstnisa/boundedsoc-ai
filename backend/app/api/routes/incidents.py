@@ -14,10 +14,23 @@ from app.models.timeline import Timeline
 from app.schemas.incident import IncidentDetail, IncidentSummary
 from app.schemas.ioc import EnrichmentResultOut, EnrichResponse, ExtractIOCsResponse
 from app.schemas.mitre import MitreSuggestionOut, MitreSuggestionResponse
+from app.schemas.remediation import RemediationDraftRequest, RemediationSuggestionOut
 from app.schemas.report import ReportOut
 from app.schemas.review import ReviewIn, ReviewOut
+from app.schemas.secret_exposure import SecretExposureAlertOut
 from app.schemas.timeline import TimelineEventOut, TimelineOut
-from app.services import ai_orchestration, audit, enrichment, export, review, timeline_builder, users
+from app.services import (
+    ai_orchestration,
+    audit,
+    enrichment,
+    export,
+    mcp_gateway,
+    remediation,
+    review,
+    secret_exposure,
+    timeline_builder,
+    users,
+)
 from app.services.ioc_extraction import extract_from_normalized_event
 
 router = APIRouter()
@@ -259,3 +272,78 @@ def export_incident(
         media_type=media_type,
         headers={"Content-Disposition": f'attachment; filename="{filename}"'},
     )
+
+
+# --- Remediation Drafting Agent -------------------------------------------
+
+
+@router.post(
+    "/incidents/{incident_id}/remediation-suggestions", response_model=RemediationSuggestionOut | None
+)
+def draft_remediation_suggestion(
+    incident_id: uuid.UUID,
+    payload: RemediationDraftRequest,
+    db: Session = Depends(get_db),
+    user: CurrentUser = Depends(get_current_user),
+):
+    incident = _get_incident_or_404(db, incident_id)
+    return remediation.draft_remediation(
+        db, incident, actor=user.email, repo_full_name=payload.repo_full_name
+    )
+
+
+@router.post(
+    "/incidents/{incident_id}/remediation-suggestions/{rid}/create-pr",
+    response_model=RemediationSuggestionOut,
+)
+def create_remediation_pr(
+    incident_id: uuid.UUID,
+    rid: uuid.UUID,
+    db: Session = Depends(get_db),
+    # Deliberately a *separate* explicit call from "approve" — this is the
+    # one endpoint in the whole remediation flow that writes to GitHub.
+    user: CurrentUser = Depends(require_role("analyst", "senior_analyst", "admin")),
+):
+    _get_incident_or_404(db, incident_id)
+    from app.models.remediation_suggestion import RemediationSuggestion
+
+    suggestion = db.get(RemediationSuggestion, rid)
+    if not suggestion or suggestion.incident_id != incident_id:
+        raise HTTPException(status_code=404, detail="Remediation suggestion not found")
+    try:
+        return remediation.create_pr(db, suggestion, actor=user.email)
+    except (ValueError, mcp_gateway.ToolInvocationBlocked) as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+
+
+# --- Credential Exposure Response ------------------------------------------
+
+
+@router.post("/incidents/{incident_id}/secret-exposure", response_model=list[SecretExposureAlertOut])
+def scan_secret_exposure(
+    incident_id: uuid.UUID, db: Session = Depends(get_db), user: CurrentUser = Depends(get_current_user)
+):
+    incident = _get_incident_or_404(db, incident_id)
+    return secret_exposure.scan_incident(db, incident, actor=user.email)
+
+
+@router.post("/incidents/{incident_id}/secret-exposure/{sid}/revoke", response_model=SecretExposureAlertOut)
+def revoke_secret_exposure(
+    incident_id: uuid.UUID,
+    sid: uuid.UUID,
+    db: Session = Depends(get_db),
+    # Same role gate as the remediation PR-create step — this is the one
+    # endpoint that actually calls out to revoke a credential, and it's
+    # enforced again server-side inside services.secret_exposure.revoke().
+    user: CurrentUser = Depends(require_role("analyst", "senior_analyst", "admin")),
+):
+    _get_incident_or_404(db, incident_id)
+    from app.models.secret_exposure_alert import SecretExposureAlert
+
+    alert = db.get(SecretExposureAlert, sid)
+    if not alert or alert.incident_id != incident_id:
+        raise HTTPException(status_code=404, detail="Secret exposure alert not found")
+    try:
+        return secret_exposure.revoke(db, alert, actor=user.email)
+    except (ValueError, mcp_gateway.ToolInvocationBlocked) as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc

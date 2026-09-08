@@ -15,6 +15,8 @@ export interface IncidentSummary {
   status: IncidentStatus;
   created_at: string;
   closed_at: string | null;
+  ml_triage_label: "routine" | "needs_review" | null;
+  ml_confidence: number | null;
 }
 
 export interface IncidentDetail extends IncidentSummary {
@@ -106,4 +108,82 @@ export interface SeveritySuggestion {
   rationale?: string;
   evidence_refs?: string[];
   errors?: string[];
+}
+
+// --- Commercial modules -----------------------------------------------------
+
+export interface RemediationSuggestion {
+  id: string;
+  incident_id: string;
+  repo_full_name: string;
+  file_path: string;
+  vulnerable_snippet: string;
+  proposed_patch: string;
+  cwe_ref: string | null;
+  confidence: number;
+  rationale: string;
+  evidence_refs: string[];
+  status: string;
+  pr_url: string | null;
+  created_at: string;
+}
+
+export interface SecretExposureAlert {
+  id: string;
+  incident_id: string;
+  secret_type: string;
+  masked_value: string;
+  source_ref: string;
+  provider: string;
+  status: string;
+  approved_by: string | null;
+  approved_at: string | null;
+  revoked_at: string | null;
+  escalation_deadline: string | null;
+  created_at: string;
+}
+
+export type ComplianceFramework = "owasp_top10" | "pci_dss" | "iso27001" | "gdpr";
+
+export interface ComplianceMapping {
+  id: string;
+  incident_id: string;
+  finding_type: string;
+  finding_id: string;
+  framework: string;
+  control_id: string;
+  control_title: string;
+  confidence: number;
+  rationale: string;
+  evidence_refs: string[];
+  created_at: string;
+}
+
+export interface ComplianceMappingResponse {
+  incident_id: string;
+  framework: string;
+  mappings: ComplianceMapping[];
+}
+
+export interface ComplianceCoverageOut {
+  coverage: Record<string, { total_controls: number; controls_with_evidence: number; mapping_count: number }>;
+}
+
+export interface ToolAccessPolicy {
+  id: string;
+  tool_name: string;
+  allowed_actions: string[];
+  scope: string;
+  updated_by: string;
+  updated_at: string;
+}
+
+export interface AIActionLogEntry {
+  id: string;
+  tool_name: string;
+  requested_action: string;
+  params_summary: Record<string, unknown>;
+  allowed: boolean;
+  policy_rule_matched: string | null;
+  timestamp: string;
 }

@@ -5,6 +5,7 @@ import IncidentQueue from "./pages/IncidentQueue";
 import IncidentDetailPage from "./pages/IncidentDetail";
 import AuditTrail from "./pages/AuditTrail";
 import Integrations from "./pages/Integrations";
+import Compliance from "./pages/Compliance";
 
 export default function App() {
   return (
@@ -18,6 +19,7 @@ export default function App() {
             <Route path="/incidents/:id" element={<IncidentDetailPage />} />
             <Route path="/audit" element={<AuditTrail />} />
             <Route path="/integrations" element={<Integrations />} />
+            <Route path="/compliance" element={<Compliance />} />
           </Routes>
         </main>
       </div>

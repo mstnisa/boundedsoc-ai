@@ -91,19 +91,50 @@ Layers (see `backend/app/`):
 | Workflow automation | `n8n/` | Orchestration only — see `n8n/README.md` |
 | Audit | `services/audit.py`, `models/audit_log.py` | Append-only, single writer |
 
-Full database schema (13 entities: `users`, `alerts`, `incidents`, `events`,
+Full database schema (18 entities: `users`, `alerts`, `incidents`, `events`,
 `iocs`, `enrichment_results`, `mitre_suggestions`, `timelines`,
 `timeline_events`, `reports`, `evidence_items`, `analyst_reviews`,
-`audit_logs`) is defined in `backend/app/models/` and versioned via Alembic
-(`backend/alembic/versions/`). See `docs/architecture.md` for the entity
-relationship diagram and a deeper walk-through of each layer.
+`audit_logs`, `tool_access_policies`, `ai_action_log`, `compliance_mappings`,
+`remediation_suggestions`, `secret_exposure_alerts`) is defined in
+`backend/app/models/` and versioned via Alembic (`backend/alembic/versions/`).
+See `docs/architecture.md` for the entity relationship diagram and a deeper
+walk-through of each layer.
+
+### Commercial modules
+
+Five additional modules extend the same evidence-gated / human-approval
+architecture — full design rationale and API surface in
+`docs/commercial-modules-proposal.md`:
+
+- **MCP/API Security Gateway** — the single choke point every AI-initiated
+  external tool call must pass through (`backend/app/services/mcp_gateway.py`).
+  Nothing reaches GitHub or a secrets provider except through this gate, and
+  every attempt — allowed or blocked — is logged to `ai_action_log`. Policy
+  is viewable/editable under Integrations → AI Tool Policies.
+- **Lightweight ML Prefilter** — a small RandomForestClassifier, trained on a
+  bundled synthetic dataset, labels each incoming incident "routine" or
+  "needs_review" right after ingestion, before the AI reasoning layer runs.
+  Never hides or drops an incident — only deprioritizes it in the queue.
+- **Compliance Mapper** — maps analyst-approved MITRE findings to OWASP Top
+  10 / PCI DSS / ISO 27001 / GDPR controls, from small bundled reference data
+  (`backend/data/compliance/`). Labeled everywhere as informational mapping,
+  never a certification.
+- **Remediation Drafting Agent** — drafts an illustrative code fix for an
+  approved finding. Approving a suggestion never creates a pull request by
+  itself; a separate "Create Pull Request" action, gated through the MCP
+  gateway, is the only thing that ever reaches GitHub (mocked by default —
+  see `EXTERNAL_TOOLS_LIVE_MODE` in `.env.example`).
+- **Credential Exposure Response** — deterministic regex scan for leaked
+  secrets (the raw value is never stored, only a masked prefix + hash).
+  Revocation is refused server-side until an analyst approves it, and is
+  routed through the same MCP gateway.
 
 ## Tech stack
 
 Python 3.12 / FastAPI / SQLAlchemy / PostgreSQL / Redis-ready caching /
 LangGraph / provider-agnostic LLM interface (mock, OpenAI, Anthropic) /
-React + TypeScript / Docker Compose / n8n / pytest / Ruff + Black / GitHub
-Actions.
+scikit-learn (ML prefilter) / React + TypeScript / Docker Compose / n8n /
+pytest / Ruff + Black / GitHub Actions.
 
 ## Quickstart
 
@@ -168,7 +199,7 @@ silently — see `docs/benchmark_results.md`.
 
 ```bash
 cd backend
-pytest -q --cov=app          # 55 tests: unit, API, DB, integration, adversarial, regression
+pytest -q --cov=app          # 61 tests: unit, API, DB, integration, adversarial, regression, commercial modules
 ruff check app tests && black --check app tests
 ```
 

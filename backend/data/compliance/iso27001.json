@@ -1,0 +1,26 @@
+{
+  "_description": "Illustrative subset of ISO/IEC 27001:2022 Annex A controls mapped to MITRE ATT&CK technique IDs this project's mock AI provider can actually produce (see app/ai/providers/mock_provider.py). Not a certification — informational mapping only, see docs/business-value.md.",
+  "framework": "iso27001",
+  "controls": [
+    {
+      "control_id": "A.8.5",
+      "control_title": "Secure authentication",
+      "mitre_technique_ids": ["T1110", "T1078"]
+    },
+    {
+      "control_id": "A.8.15",
+      "control_title": "Logging",
+      "mitre_technique_ids": ["T1027", "T1059.001"]
+    },
+    {
+      "control_id": "A.8.24",
+      "control_title": "Use of cryptography",
+      "mitre_technique_ids": ["T1003.001"]
+    },
+    {
+      "control_id": "A.5.7",
+      "control_title": "Threat intelligence",
+      "mitre_technique_ids": ["T1105"]
+    }
+  ]
+}

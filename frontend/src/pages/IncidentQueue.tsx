@@ -70,6 +70,7 @@ export default function IncidentQueue() {
                 <th>Severity</th>
                 <th>Source</th>
                 <th>Status</th>
+                <th>ML Triage</th>
                 <th>Created</th>
               </tr>
             </thead>
@@ -84,6 +85,13 @@ export default function IncidentQueue() {
                   </td>
                   <td className="mono muted">{inc.severity_source}</td>
                   <td>{inc.status}</td>
+                  <td>
+                    {inc.ml_triage_label && (
+                      <span className={`pill ${inc.ml_triage_label === "routine" ? "status-approved" : "status-pending"}`}>
+                        ML: {inc.ml_triage_label === "routine" ? "routine" : "escalated"}
+                      </span>
+                    )}
+                  </td>
                   <td className="muted">{new Date(inc.created_at).toLocaleString()}</td>
                 </tr>
               ))}

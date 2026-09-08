@@ -8,7 +8,14 @@ from app.schemas.common import ORMModel
 
 
 class ReviewIn(BaseModel):
-    target_entity_type: Literal["incident_severity", "mitre_suggestion", "report", "enrichment_result"]
+    target_entity_type: Literal[
+        "incident_severity",
+        "mitre_suggestion",
+        "report",
+        "enrichment_result",
+        "remediation_suggestion",
+        "secret_exposure_alert",
+    ]
     target_entity_id: uuid.UUID
     decision: Literal["approve", "edit", "reject"]
     comment: str | None = None

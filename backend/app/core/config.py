@@ -41,6 +41,12 @@ class Settings(BaseSettings):
 
     backend_webhook_token: str = "dev-only-webhook-token"
 
+    # Off by default (mirrors ti_use_live_providers): every AI-initiated
+    # external tool call (GitHub PR creation, secret-provider revocation) is
+    # simulated by services.mcp_gateway unless this is explicitly enabled
+    # AND a matching, enabled Integration + credential env var exist.
+    external_tools_live_mode: bool = False
+
     cors_origins: list[str] = ["http://localhost:5173", "http://localhost:3000"]
 
 

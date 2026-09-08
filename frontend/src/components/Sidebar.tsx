@@ -48,6 +48,14 @@ export default function Sidebar() {
         <span>Audit Trail</span>
       </NavLink>
 
+      <NavLink to="/compliance" className={linkClass}>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M9 12 11 14 15 9" />
+          <path d="M12 2 L4 5 V11 C4 16.2 7.4 20.1 12 22 C16.6 20.1 20 16.2 20 11 V5 Z" />
+        </svg>
+        <span>Compliance</span>
+      </NavLink>
+
       <NavLink to="/integrations" className={linkClass}>
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
           <line x1="4" y1="6" x2="20" y2="6" />

@@ -1,0 +1,16 @@
+{
+  "_description": "Illustrative subset of GDPR articles relevant to security-incident findings (Article 32's security-of-processing requirement, most directly), mapped to MITRE ATT&CK technique IDs this project's mock AI provider can actually produce. Not legal advice and not a certification — informational mapping only, see docs/business-value.md.",
+  "framework": "gdpr",
+  "controls": [
+    {
+      "control_id": "Art.32",
+      "control_title": "Security of processing (appropriate technical and organisational measures)",
+      "mitre_technique_ids": ["T1110", "T1078", "T1003.001"]
+    },
+    {
+      "control_id": "Art.33",
+      "control_title": "Notification of a personal data breach to the supervisory authority",
+      "mitre_technique_ids": ["T1105"]
+    }
+  ]
+}
