@@ -10,7 +10,7 @@ seems.
 ## Getting set up
 
 ```bash
-git clone <this-repo>
+git clone https://github.com/mstnisa/boundedsoc-ai.git
 cd boundedsoc-ai
 cp .env.example .env   # edit if you want non-default values; defaults work out of the box
 docker-compose up

@@ -139,7 +139,7 @@ pytest / Ruff + Black / GitHub Actions.
 ## Quickstart
 
 ```bash
-git clone <this-repo>
+git clone https://github.com/mstnisa/boundedsoc-ai.git
 cd boundedsoc-ai
 cp .env.example .env      # defaults work out of the box, zero paid API keys required
 docker-compose up

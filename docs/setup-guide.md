@@ -13,7 +13,7 @@ Docker images — see the note at the bottom).
 ## Path 1: Docker Compose
 
 ```bash
-git clone <this-repo>
+git clone https://github.com/mstnisa/boundedsoc-ai.git
 cd boundedsoc-ai
 cp .env.example .env
 docker-compose up
